@@ -8,12 +8,19 @@ use App\Models\Message;
 use Carbon\Carbon;
 use App\Http\Requests\ThreadRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Services\ThreadService;
+use App\Services\MessageService;
+use App\Repositories\ThreadRepository;
+use App\Repositories\MessageRepository;
 
 class ThreadController extends Controller
 {
-    public function __construct()
+    protected $thread_service;
+
+    public function __construct(ThreadService $thread_service)
     {
         $this -> middleware('auth')->except('index');
+        $this -> thread_service = $thread_service;
     }
     /**
      * Display a listing of the resource.
@@ -43,19 +50,16 @@ class ThreadController extends Controller
      */
     public function store(ThreadRequest $request)
     {
-        $thread = new Thread();
-        $thread->name = $request->name;
-        $thread->user_id = Auth::id();
-        $thread->latest_comment_time = Carbon::now();
-        $thread->save();
+        try {
+            $data = $request->only(
+                ['name','content']
+            );
+            $this->thread_service->createNewThread($data, Auth::id());
+        } catch (Exception $error) {
+            return redirect()->route('threads.index')->with('error', 'スレッドの新規作成に失敗しました');
+        }
 
-        $message = new Message();
-        $message->body = $request->content;
-        $message->user_id = Auth::id();
-        $message->thread_id = $thread->id;
-        $message->save();
-
-        return redirect()->route('threads.index')->with('success', 'スレッドの新規作成が完了しました');
+        return redirect()->route('threads.index')->with('success', 'スレッドの新規作成に成功しました');
     }
 
     /**
