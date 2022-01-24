@@ -12,4 +12,14 @@ class Thread extends Model
     protected $fillable = [
         'name', 'user_id', 'id_user_checked', 'latest_comment_time'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany('App\Models\Message');
+    }
 }

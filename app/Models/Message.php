@@ -12,4 +12,9 @@ class Message extends Model
     protected $fillable = [
         'body', 'thread_id', 'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }
