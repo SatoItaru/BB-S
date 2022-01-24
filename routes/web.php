@@ -18,6 +18,7 @@ Route::get('/', function () {
 });
 
 Route::resource('/threads', 'App\Http\Controllers\ThreadController')->except(['update','create']);
+Route::resource('/threads/{thread}/messages', 'App\Http\Controllers\MessageController')->except(['update','create']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
