@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\Thread;
+use Carbon\Carbon;
+
+class ThreadRepository
+{
+    /**
+     * @var Thread
+     */
+    protected $thread;
+    /**
+     * ThreadRepository constructor.
+     *
+     * @param Thread $thread
+     */
+    public function __construct(Thread $thread)
+    {
+        $this->thread = $thread;
+    }
+    /**
+     * Create new Thread.
+     *
+     * @param array $data
+     * @return Thread $thread
+     */
+    public function create(array $data)
+    {
+        return $this->thread->create($data);
+    }
+    public function getPaginatedThreads(int $per_page)
+    {
+        return $this->thread->orderBy('latest_comment_time', 'desc')->paginate($per_page);
+    }
+
+    public function findById(int $id)
+    {
+        return $this->thread->find($id);
+    }
+
+    public function updateTime(int $id)
+    {
+        $thread = $this->findById($id);
+        $thread->latest_comment_time = Carbon::now();
+        return $thread->save();
+    }
+}
