@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@inject('thread_service', 'App\Services\ThreadService' )
 <div class="container mt-3">
     @include('layouts.flash-message')
     <div class="row justify-content-center">
@@ -18,7 +19,7 @@
                     @foreach ($thread->messages as $message)
                         <div class="card-body">
                             <h5 class="card-title">{{ $loop->iteration }} 名前：{{ $message->user->name }}：{{ $message->created_at }}</h5>
-                            <p class="card-text">{{ $message->body }}</p>
+                            <p class="card-text">{!! $thread_service->convertUrl($message->body) !!}</p>
                         </div>
                     @endforeach
                     <div class="card-footer">
@@ -31,10 +32,10 @@
                             </div>
                             <button type="submit" class="btn btn-light">書き込む</button>
                         </form>
-                        <a href="#">全部読む</a>
-                        <a href="#">最新50</a>
-                        <a href="#">1-100</a>
-                        <a href="#">リロード</a>
+                        <a href="{{ route('threads.show', $thread->id) }}">全部読む</a>
+                        <a href="{{ route('threads.show', $thread->id) }}">最新50</a>
+                        <a href="{{ route('threads.show', $thread->id) }}">1-100</a>
+                        <a href="{{ route('threads.index') }}">リロード</a>
                     </div>
                 </div>
             </div>
