@@ -2,6 +2,7 @@
 
 @section('content')
 @inject('message_service', 'App\Services\MessageService' )
+@inject('image_service', 'App\Services\ImageService' )
 <div class="container mt-3">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -19,6 +20,15 @@
                     <div class="card-body">
                         <p>{{ $loop->iteration }} {{ $message->user->name }} {{ $message->created_at }}</p>
                         <p class="mb-0">{!! $message_service->convertUrl($message->body) !!}</p>
+                        <div class="row">
+                            @if (!$message->images->isEmpty())
+                            @foreach ($message->images as $image )
+                                <div class="col-md-3">
+                                    <img src="{{ $image_service->createTemporaryUrl($image->s3_file_path) }}" alt="" class="img-thumbnail">
+                                </div>
+                            @endforeach
+                            @endif
+                        </div>
                     </div>
                 </div>
             @endforeach
@@ -29,14 +39,7 @@
             <div class="card">
                 <h5 class="card-header">レスを投稿する</h5>
                 <div class="card-body">
-                    <form method="POST" action="{{ 'messages.store', $thread->id }}" class="mb-4">
-                        @csrf
-                        <div class="form-group">
-                            <label for="thread-first-content">内容</label>
-                            <textarea name="body" id="thread-first-content" rows="3" class="form-control" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-light">書き込む</button>
-                    </form>
+                    @include('components.message-create', compact('thread'))
                 </div>
             </div>
         </div>
