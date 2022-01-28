@@ -117,7 +117,7 @@ class AdminThreadController extends Controller
         try {
             $this->thread_repository->deleteThread($id);
         } catch (Exception $error) {
-            // dd($error);
+            
             return redirect()->route('admin.threads.index')->with('error', 'スレッドの削除に失敗しました。');
         }
         return redirect()->route('admin.threads.index')->with('success', 'スレッドの削除に成功しました。');
