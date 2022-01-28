@@ -18,6 +18,11 @@ class Thread extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function admin()
+    {
+        return $this->belongsTo('App\Models\Admin');
+    }
+
     public function messages()
     {
         return $this->hasMany('App\Models\Message');

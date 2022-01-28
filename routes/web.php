@@ -30,6 +30,10 @@ Route::prefix('admin')->name('admin.')->group(function(){
         return view('admin.auth.dashboard');
     })->middleware(['auth:admin'])->name('dashboard');
 
+    Route::resource('/threads', 'App\Http\Controllers\Admin\Auth\AdminThreadController')->except(['update','create','store'])->middleware(['auth:admin']);
+
+    Route::resource('/threads/{thread}/messages', 'App\Http\Controllers\Admin\Auth\AdminMessageController')->only(['destroy'])->middleware(['auth:admin']);
+
     require __DIR__.'/admin.php';
 });
 
