@@ -24,10 +24,7 @@
                     @endforeach
                     <div class="card-footer">
                         @include('components.message-create', compact('thread'))
-                        <a href="{{ route('threads.show', $thread->id) }}">全部読む</a>
-                        <a href="{{ route('threads.show', $thread->id) }}">最新50</a>
-                        <a href="{{ route('threads.show', $thread->id) }}">1-100</a>
-                        <a href="{{ route('threads.index') }}">リロード</a>
+                        @include('components.show-links', compact('thread'))
                     </div>
                 </div>
             </div>
