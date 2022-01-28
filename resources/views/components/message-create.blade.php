@@ -2,7 +2,7 @@
     <form action="{{ route('admin.threads.destroy', $thread->id) }}" method="POST" class="md-4">
         @csrf
         @method('DELETE')
-        <input type="submit" class="btn btn-danger" value="削除" onclick="return confirm('スレッドを削除します。本当に実行してよろしいでしょうか？')">
+        <input type="submit" class="btn btn-light" value="削除" onclick="return confirm('スレッドを削除します。本当に実行してよろしいでしょうか？')">
     </form>
 @else
     <form method="POST" action="{{ route('messages.store', $thread->id) }}" class="mb-1" enctype="multipart/form-data">
