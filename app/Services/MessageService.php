@@ -30,7 +30,7 @@ class MessageService
         }
         DB::commit();
 
-        return $thread;
+        return $message;
     }
 
     public function convertUrl(string $message)
