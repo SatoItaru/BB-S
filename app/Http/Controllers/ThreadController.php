@@ -10,6 +10,7 @@ use App\Http\Requests\ThreadRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Services\ThreadService;
 use App\Services\MessageService;
+use App\Services\SlackNotificationService;
 use App\Repositories\ThreadRepository;
 use App\Repositories\MessageRepository;
 
@@ -19,13 +20,17 @@ class ThreadController extends Controller
 
     protected $thread_repository;
 
+    protected $slack_notification_service;
+
     public function __construct(
         ThreadService $thread_service,
-        ThreadRepository $thread_repository
+        ThreadRepository $thread_repository,
+        SlackNotificationService $slack_notification_service
     ) {
         $this->middleware('auth')->except('index');
         $this->thread_service = $thread_service;
         $this->thread_repository = $thread_repository;
+        $this->slack_notification_service = $slack_notification_service;
     }
     /**
      * Display a listing of the resource.
@@ -62,6 +67,7 @@ class ThreadController extends Controller
                 ['name','content']
             );
             $this->thread_service->createNewThread($data, Auth::id());
+            $this->slack_notification_service->send(Auth::user()->name . ' が ' . $request->name . 'を立てました！');
         } catch (Exception $error) {
             return redirect()->route('threads.index')->with('error', 'スレッドの新規作成に失敗しました');
         }
